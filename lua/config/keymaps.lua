@@ -32,6 +32,11 @@ function M.setup()
     vim.keymap.set('n', '<S-A-l>', ':BufferLineMoveNext<CR>', { desc = "Move buffer right" })
 
 	vim.keymap.set('n', '<leader>lg', ':LazyGit<CR>', { desc = '[L]azy [G]it' })
+
+	vim.keymap.set('n', '<leader>t', ':Telescope<CR>', { desc = "Telescope" })
+
+	vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = "Show diagnostics under cursor" })
+	vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 end
 
 return M

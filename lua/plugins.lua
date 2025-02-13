@@ -107,44 +107,37 @@ return {
         event = "InsertEnter",
         config = function()
             require("copilot").setup({
-                panel = {
-                    enabled = true,
-                    auto_refresh = true,
-                    keymap = {
-                        jump_prev = "[[",
-                        jump_next = "]]",
-                        accept = "<CR>",
-                        refresh = "gr",
-                        open = "<M-CR>"
-                    },
+				suggestion = {
+                enabled = true,
+                auto_trigger = true,
+                debounce = 150,      -- Increase this to reduce frequency of suggestions
+                keymap = {
+                    accept = "<C-y>",  -- Changed to Alt+j to avoid conflicts
+                    next = "<M-]>",
+                    prev = "<M-[>",
+                    dismiss = "<C-]>",
                 },
-                suggestion = {
-                    enabled = true,
-                    auto_trigger = true,
-                    debounce = 75,
-                    keymap = {
-                        accept = "<leader><Tab>",
-                        accept_word = false,
-                        accept_line = false,
-                        next = "<M-]>",
-                        prev = "<M-[>",
-                        dismiss = "<C-]>",
-                    },
-                },
-                filetypes = {
-                    yaml = false,
-                    markdown = false,
-                    help = false,
-                    gitcommit = false,
-                    gitrebase = false,
-                    hgcommit = false,
-                    svn = false,
-                    cvs = false,
-                    ["."] = false,
-                },
-                copilot_node_command = 'node', -- Node.js version must be > 16.x
-                server_opts_overrides = {},
-            })
+            },
+            filetypes = {
+                -- Disable for certain filetypes to reduce triggers
+                markdown = false,
+                help = false,
+                gitcommit = false,
+                gitrebase = false,
+                hgcommit = false,
+                svn = false,
+                cvs = false,
+                ["."] = true,
+            },
+            copilot_node_command = 'node', -- Specify node version
+            server_opts_overrides = {
+                trace = "off",             -- Reduce server logging
+                advanced = {
+                    listCount = 3,         -- Reduce number of suggestions
+                    inlineSuggestCount = 3,-- Reduce number of inline suggestions
+                }
+			}
+          })
         end,
     },
 	{
@@ -230,7 +223,7 @@ return {
                 left_trunc_marker = '',
                 right_trunc_marker = '',
                 diagnostics = "nvim_lsp",
-                diagnostics_indicator = function(count, level, diagnostics_dict, context)
+                diagnostics_indicator = function(count)
                     return "("..count..")"
                 end,
                 offsets = {
@@ -258,4 +251,62 @@ return {
     end
   },
   'kdheepak/lazygit.nvim',
+  {
+      "yetone/avante.nvim",
+      event = "VeryLazy",
+      lazy = false,
+      version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
+      opts = {
+          -- add any opts here
+          -- for example
+          provider = "claude",
+          openai = {
+              endpoint = "https://api.anthropic.com",
+              model = "claude-3-5-haiku-20241022", -- your desired model (or use gpt-4o, etc.)
+              timeout = 30000, -- timeout in milliseconds
+              temperature = 0, -- adjust if needed
+              max_tokens = 4096,
+          },
+      },
+      -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+      build = "make",
+      -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+      dependencies = {
+          "stevearc/dressing.nvim",
+          "nvim-lua/plenary.nvim",
+          "MunifTanjim/nui.nvim",
+          --- The below dependencies are optional,
+          "echasnovski/mini.pick", -- for file_selector provider mini.pick
+          "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+          "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+          "ibhagwan/fzf-lua", -- for file_selector provider fzf
+          "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+          "zbirenbaum/copilot.lua", -- for providers='copilot'
+          {
+              -- support for image pasting
+              "HakonHarnes/img-clip.nvim",
+              event = "VeryLazy",
+              opts = {
+                  -- recommended settings
+                  default = {
+                      embed_image_as_base64 = false,
+                      prompt_for_file_name = false,
+                      drag_and_drop = {
+                          insert_mode = true,
+                      },
+                      -- required for Windows users
+                      use_absolute_path = true,
+                  },
+              },
+          },
+          {
+              -- Make sure to set this up properly if you have lazy=true
+              'MeanderingProgrammer/render-markdown.nvim',
+              opts = {
+                  file_types = { "markdown", "Avante" },
+              },
+              ft = { "markdown", "Avante" },
+          },
+      },
+  }
 }
