@@ -123,7 +123,7 @@ return {
                     auto_trigger = true,
                     debounce = 75,
                     keymap = {
-                        accept = "<Tab>",
+                        accept = "<leader><Tab>",
                         accept_word = false,
                         accept_line = false,
                         next = "<M-]>",
@@ -147,4 +147,115 @@ return {
             })
         end,
     },
+	{
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' }, -- Optional, for file icons
+    config = function()
+        require('lualine').setup({
+            options = {
+                icons_enabled = true,
+                theme = 'auto',
+                component_separators = { left = '', right = ''},
+                section_separators = { left = '', right = ''},
+                disabled_filetypes = {
+                    statusline = {},
+                    winbar = {},
+                },
+                ignore_focus = {},
+                always_divide_middle = true,
+                globalstatus = false,
+                refresh = {
+                    statusline = 1000,
+                    tabline = 1000,
+                    winbar = 1000,
+                }
+            },
+            sections = {
+                lualine_a = {'mode'},
+                lualine_b = {'branch', 'diff', 'diagnostics'},
+                lualine_c = {'filename'},
+                lualine_x = {'encoding', 'fileformat', 'filetype'},
+                lualine_y = {'progress'},
+                lualine_z = {'location'}
+            },
+            inactive_sections = {
+                lualine_a = {},
+                lualine_b = {},
+                lualine_c = {'filename'},
+                lualine_x = {'location'},
+                lualine_y = {},
+                lualine_z = {}
+            },
+        })
+    end
+  },
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons",
+        "MunifTanjim/nui.nvim",
+    },
+    config = function()
+        require("neo-tree").setup({
+            close_if_last_window = true,
+            window = {
+                width = 30,
+            },
+        })
+        vim.keymap.set('n', '<leader>e', ':Neotree toggle<CR>', { desc = "Toggle file explorer" })
+    end
+  },
+  {
+    'akinsho/bufferline.nvim',
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    config = function()
+        require("bufferline").setup({
+            options = {
+                mode = "buffers", -- set to "tabs" to only show tabpages instead
+                numbers = "none", -- can be "none" | "ordinal" | "buffer_id" | "both"
+                close_command = "bdelete! %d",       -- can be a string | function
+                right_mouse_command = "bdelete! %d", -- can be a string | function
+                left_mouse_command = "buffer %d",    -- can be a string | function
+                middle_mouse_command = nil,          -- can be a string | function
+                indicator = {
+                    icon = '▎', -- this should be omitted if indicator style is not 'icon'
+                    style = 'icon',
+                },
+                buffer_close_icon = '󰅖',
+                modified_icon = '●',
+                close_icon = '',
+                left_trunc_marker = '',
+                right_trunc_marker = '',
+                diagnostics = "nvim_lsp",
+                diagnostics_indicator = function(count, level, diagnostics_dict, context)
+                    return "("..count..")"
+                end,
+                offsets = {
+                    {
+                        filetype = "NvimTree",
+                        text = "File Explorer",
+                        highlight = "Directory",
+                        separator = true
+                    }
+                },
+                color_icons = true,
+                show_buffer_icons = true,
+                show_buffer_close_icons = true,
+                show_close_icon = true,
+                show_tab_indicators = true,
+                separator_style = "thin",
+                always_show_bufferline = true,
+                hover = {
+                    enabled = true,
+                    delay = 200,
+                    reveal = {'close'}
+                },
+            }
+        })
+    end
+  },
+  'kdheepak/lazygit.nvim',
 }
