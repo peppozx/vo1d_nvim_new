@@ -1,6 +1,9 @@
 local M = {}
 
 function M.setup()
+	vim.keymap.set('n', '<leader>w', ':w<CR>')
+	vim.keymap.set('n', '<leader>q', ':q<CR>')
+
     -- Lazy plugin keymaps
     vim.keymap.set("n", "<leader>l", vim.cmd.Lazy, { desc = "Lazy" })
     vim.keymap.set("n", "<leader>li", ":Lazy install<CR>", { desc = "Lazy Install" })
@@ -37,6 +40,8 @@ function M.setup()
 
 	vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = "Show diagnostics under cursor" })
 	vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
+
+	vim.keymap.set('n', '<leader>bn', ':enew<CR>', { desc = "New buffer" })
 end
 
 return M
