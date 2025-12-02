@@ -36,10 +36,10 @@ return {
             -- Setup neodev for better Lua development
             require("neodev").setup()
 
-            local lspconfig = require("lspconfig")
-
-            -- Lua LSP configuration
-            lspconfig.lua_ls.setup({
+            -- Lua LSP configuration using new vim.lsp.config API
+            vim.lsp.config.lua_ls = {
+                cmd = { "lua-language-server" },
+                root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml", ".git" },
                 settings = {
                     Lua = {
                         runtime = {
@@ -57,10 +57,12 @@ return {
                         },
                     },
                 },
-            })
+            }
 
-            -- TypeScript LSP configuration
-            lspconfig.ts_ls.setup({
+            -- TypeScript LSP configuration using new vim.lsp.config API
+            vim.lsp.config.ts_ls = {
+                cmd = { "typescript-language-server", "--stdio" },
+                root_markers = { "tsconfig.json", "package.json", "jsconfig.json", ".git" },
                 settings = {
                     typescript = {
                         inlayHints = {
@@ -85,7 +87,11 @@ return {
                         }
                     }
                 }
-            })
+            }
+
+            -- Enable the LSP servers
+            vim.lsp.enable("lua_ls")
+            vim.lsp.enable("ts_ls")
         end
     },
 	{
@@ -100,45 +106,6 @@ return {
         config = function()
             require("config.completion").setup()
         end
-    },
-	{
-        "zbirenbaum/copilot.lua",
-        cmd = "Copilot",
-        event = "InsertEnter",
-        config = function()
-            require("copilot").setup({
-				suggestion = {
-                enabled = true,
-                auto_trigger = true,
-                debounce = 150,      -- Increase this to reduce frequency of suggestions
-                keymap = {
-                    accept = "<C-y>",  -- Changed to Alt+j to avoid conflicts
-                    next = "<M-]>",
-                    prev = "<M-[>",
-                    dismiss = "<C-]>",
-                },
-            },
-            filetypes = {
-                -- Disable for certain filetypes to reduce triggers
-                markdown = false,
-                help = false,
-                gitcommit = false,
-                gitrebase = false,
-                hgcommit = false,
-                svn = false,
-                cvs = false,
-                ["."] = true,
-            },
-            copilot_node_command = 'node', -- Specify node version
-            server_opts_overrides = {
-                trace = "off",             -- Reduce server logging
-                advanced = {
-                    listCount = 3,         -- Reduce number of suggestions
-                    inlineSuggestCount = 3,-- Reduce number of inline suggestions
-                }
-			}
-          })
-        end,
     },
 	{
     'nvim-lualine/lualine.nvim',
@@ -251,62 +218,4 @@ return {
     end
   },
   'kdheepak/lazygit.nvim',
-  {
-      "yetone/avante.nvim",
-      event = "VeryLazy",
-      lazy = false,
-      version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
-      opts = {
-          -- add any opts here
-          -- for example
-          provider = "claude",
-          openai = {
-              endpoint = "https://api.anthropic.com",
-              model = "claude-3-5-haiku-20241022", -- your desired model (or use gpt-4o, etc.)
-              timeout = 30000, -- timeout in milliseconds
-              temperature = 0, -- adjust if needed
-              max_tokens = 4096,
-          },
-      },
-      -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-      build = "make",
-      -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-      dependencies = {
-          "stevearc/dressing.nvim",
-          "nvim-lua/plenary.nvim",
-          "MunifTanjim/nui.nvim",
-          --- The below dependencies are optional,
-          "echasnovski/mini.pick", -- for file_selector provider mini.pick
-          "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-          "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-          "ibhagwan/fzf-lua", -- for file_selector provider fzf
-          "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-          "zbirenbaum/copilot.lua", -- for providers='copilot'
-          {
-              -- support for image pasting
-              "HakonHarnes/img-clip.nvim",
-              event = "VeryLazy",
-              opts = {
-                  -- recommended settings
-                  default = {
-                      embed_image_as_base64 = false,
-                      prompt_for_file_name = false,
-                      drag_and_drop = {
-                          insert_mode = true,
-                      },
-                      -- required for Windows users
-                      use_absolute_path = true,
-                  },
-              },
-          },
-          {
-              -- Make sure to set this up properly if you have lazy=true
-              'MeanderingProgrammer/render-markdown.nvim',
-              opts = {
-                  file_types = { "markdown", "Avante" },
-              },
-              ft = { "markdown", "Avante" },
-          },
-      },
-  }
 }
