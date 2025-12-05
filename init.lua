@@ -14,4 +14,4 @@ require("config.keymaps").setup()
 require("config.lsp").setup()
 require("config.copilot").setup()
 
-vim.cmd("colorscheme monokai-pro-spectrum")
+vim.cmd("colorscheme retrobox")
