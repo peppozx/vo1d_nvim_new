@@ -291,5 +291,6 @@ return {
       { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
       { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
     },
-  }
+  },
+  'projekt0n/github-nvim-theme',
 }

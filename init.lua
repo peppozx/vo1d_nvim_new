@@ -14,4 +14,4 @@ require("config.keymaps").setup()
 require("config.lsp").setup()
 require("config.copilot").setup()
 
-vim.cmd("colorscheme retrobox")
+vim.cmd("colorscheme github_dark_high_contrast")
