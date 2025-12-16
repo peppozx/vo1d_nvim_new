@@ -1,8 +1,9 @@
 vim.g.mapleader = ' '
 
 vim.opt.relativenumber = true
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
 
 -- Hide default line bar from neovim - Using lualine
 vim.opt.laststatus = 3
@@ -14,4 +15,8 @@ require("config.keymaps").setup()
 require("config.lsp").setup()
 require("config.copilot").setup()
 
-vim.cmd("colorscheme github_dark_high_contrast")
+vim.cmd("colorscheme everforest")
+
+if vim.g.neovide then
+  vim.o.guifont = "JetBrainsMono Nerd Font:h14"
+end

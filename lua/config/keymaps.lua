@@ -30,7 +30,6 @@ function M.setup()
 	-- Buffer navigation
     vim.keymap.set('n', '<S-h>', ':BufferLineCyclePrev<CR>', { desc = "Previous buffer" })
     vim.keymap.set('n', '<S-l>', ':BufferLineCycleNext<CR>', { desc = "Next buffer" })
-    -- Move buffers
     vim.keymap.set('n', '<S-A-h>', ':BufferLineMovePrev<CR>', { desc = "Move buffer left" })
     vim.keymap.set('n', '<S-A-l>', ':BufferLineMoveNext<CR>', { desc = "Move buffer right" })
 
